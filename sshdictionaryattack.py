@@ -1,11 +1,5 @@
 #!/usr/bin/env python
 
-"""
-  Author: Vivek Ramachandran
-  Website: http://SecurityTube.net
-  Online Infosec Training: http://SecurityTube-Training.com
-"""
-
 import paramiko
 import sys
 
