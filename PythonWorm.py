@@ -1,8 +1,6 @@
 import socket
 import subprocess
-import sys
 from datetime import datetime
-
 import paramiko
 import sys
 
@@ -36,3 +34,16 @@ def sshScan ():
         ## if a socket is listening it will print out the port number
         sock.close()
         return result
+
+def UploadFileAndExecute(sshConnection, fileName) :
+    sftpClient = ssh.open_sftp()
+    sftpClient.put(fileName, "/tmp/" +fileName)
+    ssh.exec_command("chmod a+x /tmp/" +fileName)
+    ssh.exec_command("nohup /tmp/" +fileName+ " &")
+
+if __name__ == "__main__" :
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(sys.argv[1], username=sys.argv[2], password=sys.argv[3])
+    UploadFileAndExecute(ssh, sys.argv[4])
+    ssh.close()
